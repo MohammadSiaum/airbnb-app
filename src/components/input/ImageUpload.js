@@ -17,7 +17,7 @@ const ImageUpload = ({
     }, [onChange])
     return (
         <CldUploadWidget 
-           onUploadAdded={handleUpload}
+           onUpload={handleUpload}
            uploadPreset='kw9tsrgt'
            options={{
              maxFiles: 1

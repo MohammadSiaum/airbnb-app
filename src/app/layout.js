@@ -1,5 +1,7 @@
 import { Nunito, Ubuntu, Maven_Pro, Albert_Sans } from "next/font/google";
 import "./globals.css";
+
+import ClientOnly from "../components/ClientOnly";
 import Footer from "../components/footer/Footer";
 import RegisterModal from "../components/modals/RegisterModal";
 import LoginModal from "../components/modals/LoginModal";
@@ -7,17 +9,14 @@ import RentModal from "../components/modals/RentModal";
 
 import Navbar from "../components/navbar/Navbar";
 import { ToastContainer } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
-import { getCurrentUser } from '../actions/getCurrentUser';
-
+import "react-toastify/dist/ReactToastify.css";
+import { getCurrentUser } from "../actions/getCurrentUser";
 
 const nunito = Nunito({ subsets: ["latin"] });
-const ubuntu = Ubuntu({ subsets: ["latin"],  weight: '300' });
-const maven = Maven_Pro({ subsets: ["latin"],  weight: '400' });
+const ubuntu = Ubuntu({ subsets: ["latin"], weight: "300" });
+const maven = Maven_Pro({ subsets: ["latin"], weight: "400" });
 
-const albert = Albert_Sans({subsets: ["latin"], weight: '300'})
-
-
+const albert = Albert_Sans({ subsets: ["latin"], weight: "300" });
 
 export const metadata = {
   title: "Airbnb",
@@ -26,18 +25,21 @@ export const metadata = {
 
 export default async function RootLayout({ children }) {
   const currentUser = await getCurrentUser();
-  
 
   return (
     <html lang="en">
       <body className={albert.className}>
-        <Navbar currentUser={currentUser} />
-        <RentModal />
-        <RegisterModal />
-        <LoginModal />
-        {children}
-        <ToastContainer />
-        <Footer />
+        <ClientOnly>
+          <Navbar currentUser={currentUser} />
+          <RentModal />
+          <RegisterModal />
+          <LoginModal />
+          <ToastContainer />
+          <Footer />
+        </ClientOnly>
+        <div className="pb-20 pt-28">
+          {children}
+         </div>
       </body>
     </html>
   );

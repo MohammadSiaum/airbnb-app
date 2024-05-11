@@ -11,7 +11,8 @@ const InputField = ({
     formatPrice,
     register,
     required,
-    errors
+    errors,
+    className
 
 }) => {
     return (
@@ -20,7 +21,7 @@ const InputField = ({
                 <BiDollar 
                    size={24}
                    className='
-                      text-neutral-700
+                      text-rose-500
                       absolute
                       top-5
                       left-2
@@ -34,6 +35,7 @@ const InputField = ({
                placeholder=" "
                type={type}
                className={`
+                  ${className}
                   peer
                   w-full
                   p-3
@@ -49,6 +51,7 @@ const InputField = ({
                   ${formatPrice ? 'pl-9' : 'pl-4'}
                   ${errors[id] ? 'border-rose-500' : 'border-neutral-300'}
                   ${errors[id] ? 'focus:border-rose-600 border-2' : 'focus:border-rose-300'}
+                  ${formatPrice ? 'font-bold text-lg' : 'font-medium'}
                `}
             />
             <label

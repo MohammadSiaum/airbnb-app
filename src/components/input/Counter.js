@@ -48,12 +48,12 @@ const Counter = ({
                       h-8
                       rounded-full
                       border-2
-                      border-gray-600
+                      border-rose-500
+                      bg-rose-100
                       flex
                       items-center
                       justify-center
-                      text-gray-800
-                      bg-gray-200
+                      text-rose-700
                       cursor-pointer
                       hover:opacity-80
                       transition                  
@@ -72,12 +72,12 @@ const Counter = ({
                       h-8
                       rounded-full
                       border-2
-                      border-rose-500
-                      bg-rose-100
+                      border-violet-500
                       flex
                       items-center
                       justify-center
-                      text-rose-700
+                      text-violet-600
+                      bg-violet-100
                       cursor-pointer
                       hover:opacity-80
                       transition                  

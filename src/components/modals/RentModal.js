@@ -11,6 +11,10 @@ import CategoryInput from '../input/CategoryInput';
 import ImageUpload from "../input/ImageUpload";
 import { useForm } from 'react-hook-form';
 import dynamic from 'next/dynamic';
+import InputField from '../input/InputField';
+import axios from 'axios';
+import { toast } from 'react-toastify';
+import { useRouter } from 'next/navigation';
 
 const STEPS = {
     CATEGORY: 0,
@@ -23,8 +27,10 @@ const STEPS = {
 }
 
 const RentModal = () => {
+    const router = useRouter();
     const rentModal = useRentModal();
     const [step, setStep] = useState(STEPS.CATEGORY);
+    const [isLoading, setIsLoading] = useState(false);
 
     const {
         register,
@@ -54,6 +60,7 @@ const RentModal = () => {
     const guestCount = watch('guestCount');
     const roomCount = watch('roomCount');
     const bathroomCount = watch('bathroomCount');
+    const imageSrc = watch('imageSrc');
 
 
 
@@ -80,6 +87,31 @@ const RentModal = () => {
         setStep((value) => value + 1);
 
     };
+
+    const onSubmit = (data) => {
+        if (step !== STEPS.PRICE) {
+            return onNext();
+        }
+
+        setIsLoading(true);
+        axios.post('/api/listings', data)
+          .then(() => {
+            toast.success('Listing Created.');
+            router.refresh();
+            reset();
+            setStep(STEPS.CATEGORY);
+            rentModal.onClose();
+
+          })
+          .catch(() => {
+            toast.error("Something went wrong!");
+            // console.log(data);
+          })
+          .finally(() => {
+            setIsLoading(false);
+
+          })
+    }
 
     const actionLabel = useMemo(() => {
         if(step === STEPS.PRICE) {
@@ -195,7 +227,62 @@ const RentModal = () => {
                    title={"Add a photo of your place"}
                    subtitle={"Show guests what your place looks like!"}
                 />
-                <ImageUpload />
+                <ImageUpload 
+                   value={imageSrc}
+                   onChange={(value) => setCustomValue('imageSrc', value)}
+                />
+            </div>
+        )
+    }
+
+    // step-4: Description
+    if (step === STEPS.DESCRIPTION) {
+        bodyContent = (
+            <div className='flex flex-col gap-8'>
+                <Heading 
+                   title={"How would you describe your place?"}
+                   subtitle={'Short and sweet works best!'}
+                />
+                <InputField 
+                   id="title"
+                   label={"Title"}
+                   disable={isLoading}
+                   register={register}
+                   errors={errors}
+                   required
+                />
+                <hr />
+                <InputField 
+                   id="description"
+                   label={"Description"}
+                   disable={isLoading}
+                   register={register}
+                   errors={errors}
+                   required
+                   className={'h-24'}
+                />
+            </div>
+        )
+    }
+
+    // step-5: price
+    if (step === STEPS.PRICE) {
+        bodyContent = (
+            <div className='flex flex-col gap-8'>
+                <Heading 
+                  title={'Now, set your price'}
+                  subtitle={"How much do you cahrge per night?"}
+                />
+                <InputField 
+                   id="price"
+                   label={"Pirce"}
+                   formatPrice
+                   type='number'
+                   disable={isLoading}
+                   register={register}
+                   errors={errors}
+                   required
+                />
             </div>
         )
     }
@@ -208,7 +295,7 @@ const RentModal = () => {
         <Modal
            isOpen={rentModal.isOpen}
            onClose={rentModal.onClose}
-           onSubmit={onNext}
+           onSubmit={handleSubmit(onSubmit)}
            actionLabel={actionLabel}
            secondaryActionLabel={secondaryActionLabel}
            secondaryAction={step === STEPS.CATEGORY ? undefined : onBack}
