@@ -29,7 +29,7 @@ export default async function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={albert.className}>
-        <ClientOnly>
+        <ClientOnly label="Navber">
           <Navbar currentUser={currentUser} />
           <RentModal />
           <RegisterModal />

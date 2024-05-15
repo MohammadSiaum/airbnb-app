@@ -2,16 +2,15 @@
 
 import React from 'react';
 import { IoIosHeart, IoIosHeartEmpty } from 'react-icons/io';
+import useFavorite from '../hooks/useFavorite';
 
 
 const HeartButton = ({
     listingId,
     currentUser
 }) => {
-    const hasFavorited = false;
-    const toggleFavorite = () => {
+    const { toggleFavorite, hasFavorited } = useFavorite({listingId, currentUser});
 
-    }
     return (
         <div
           onClick={toggleFavorite}

@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
-import { getCurrentUser } from '../../../actions/getCurrentUser';
-import prisma from "../../../libs/prismadb";
+import  { getCurrentUser }  from '../../../../actions/getCurrentUser';
+import prisma from "../../../../libs/prismadb";
 
-export default async function POST(req, {params}) {
+export async function POST(req, {params}) {
 
     const currentUser = await getCurrentUser();
 
@@ -42,17 +42,17 @@ export async function DELETE(req, {params}) {
 
     const { listingId } = params;
 
-    if (!listingId || typeof listingId !== 'string') {
+    if (!listingId) {
         throw new Error("Invalid ID");
     }
 
-    let favoriteIds = [...DELETE(currentUser.favoriteIds || [])];
+    let favoriteIds = [...(currentUser.favoriteIds || [])];
 
     favoriteIds = favoriteIds.filter((id) => id !== listingId);
 
     const user = await prisma.user.update({
         where: {
-            id: currentUser
+            id: currentUser.id
         },
         data: {
             favoriteIds
